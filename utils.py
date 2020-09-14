@@ -1,5 +1,6 @@
 import re
 from collections import namedtuple, Counter
+import time
 
 #TODO:
 #   1. Extend child_search to be able to search for multiple instances of a pattern
@@ -176,8 +177,8 @@ def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
             feat_value = getattr(token, feat)
             if ignorecase and feat == 'form':
                 feat_value = feat_value.lower()
-                mydict[feat] = feat_value
-        token_nt = uniq_tok(**mydict)  # Namedtuple
+            mydict[feat] = feat_value
+        token_nt = token_namedtuple(**mydict)  # Namedtuple
         counter_out.update([token_nt])  # Can add to set because it's immutable
 
     return set(k for k, v in counter_out.items() if v >= min_freq)
@@ -228,4 +229,4 @@ class EmptyQueryError(Exception):
     pass
 
 #namedtuple for the collocation search
-uniq_tok = namedtuple('token',['form','lemma','upos','xpos','deprel'], defaults=[None]*5)
+token_namedtuple = namedtuple('token', ['form', 'lemma', 'upos', 'xpos', 'deprel'], defaults=[None] * 5)
