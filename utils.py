@@ -1,5 +1,5 @@
 import re
-from collections import namedtuple
+from collections import namedtuple, Counter
 
 #TODO:
 #   1. Extend child_search to be able to search for multiple instances of a pattern
@@ -35,7 +35,9 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
 
         regex: bool: Whether to use regular expression matching for form and lemma
         ignorecase: bool: Whether the search should be case-sensitive
-        """
+
+    @return:
+        bool: True/False"""
 
     if deprel != None:
         try:
@@ -105,9 +107,24 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
 
 def feats_match(token, deprel=None, form=None, lemma=None,
              upos=None, xpos=None, ignorecase=False):
-    """Function for checking that a token conll object matches a given pattern
+    """Function for checking that a token conll object matches a given pattern.
         Note that this does not check context within a sentence and so does not
-        need a tree.  It also does not support regex; only ignorecase"""
+        need a tree.  It also does not support regex; only ignorecase
+
+        @posit-args:
+            token: pyconll.token: A pyconll token object
+
+        @kwargs:
+            deprel: str: The deprel to check the token against
+            form: str: The form to check the token against
+            lemma: str: The lemma to check the token against
+            upos: str: The UPOS to check the token against
+            xpos: str: The XPOS to check the token against
+            ignorecase: bool: Whether to ignore case (case insensitive) when matching form
+
+        @return:
+            bool: True/False
+    """
 
     if form != None:
         form_x = form.lower() if ignorecase else form
@@ -139,6 +156,31 @@ def feats_match(token, deprel=None, form=None, lemma=None,
 
     return True
 
+def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
+    """Given a list of features and an iterable of tokens, iterates through the tokens and adds them
+        to a set as namedtuples.  These named tuples contain the attributes form, lemma, upos, xpos, and deprel.
+        If a feature is not specified, when the namedtuple attribute for that feature will be None.
+
+        Private function, mainly used for top_n_collocations
+
+        @posit-args:
+            features: iterable: An iterable of token feature attributes to specify
+            match_list: iterable: An iterable of pyconll.Token objects"""
+
+    global counter_out
+    counter_out = Counter()
+    for token in match_list:
+        # make dict to load into the namedtuple
+        mydict = {}
+        for feat in features:
+            feat_value = getattr(token, feat)
+            if ignorecase and feat == 'form':
+                feat_value = feat_value.lower()
+                mydict[feat] = feat_value
+        token_nt = uniq_tok(**mydict)  # Namedtuple
+        counter_out.update([token_nt])  # Can add to set because it's immutable
+
+    return set(k for k, v in counter_out.items() if v >= min_freq)
 
 def _map_tokens(tree):
     """Assigns map attribute to tree"""
@@ -158,6 +200,22 @@ def _assign_children(tree):
             head_tok.children += [tok.id]  # Populate children for whole tree
         except KeyError:
             pass
+
+
+def _make_token_query_(token, ignorecase=False):
+    """Coerces word to a dictionary query.
+        word: int OR dict: the word to search for in the target matches.  If int, returns a dict
+                containing form and ignorecase.  If dict, returns a dict with the specified features
+                plus ignorecase"""
+    if isinstance(token, str):
+        tokenquery = {"form": token, "ignorecase": ignorecase}
+    elif isinstance(token, dict):
+        tokenquery = {k:v for (k,v) in token.items() if k in ['form','lemma','upos','xpos','deprel']}
+        tokenquery["ignorecase"] = ignorecase
+    else:
+        raise TypeError('token parameter must be either a string or a dict')
+
+    return tokenquery
 
 def top_n_sublist(iterable, n=100, key=lambda x: x, reverse=False):
     """Function for finding top N of the iterable while holding only i<=N items in memory at a time"""

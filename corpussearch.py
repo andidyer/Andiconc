@@ -71,16 +71,16 @@ class CorpusSearch:
             #Second loop is where the actual stuff happens.
             for tok in sent:
                 if utils.is_match(tok, sent, **target):
-                    # Instance of target sans recursive context
-                    results_container.target_all.append(tok)
                     if tok.id in context_matches:
                         #This is a match of target and recursive context
                         results_container.target_in_context.append(tok)
                         results_container.sentences.append(sent)
+                    else:
+                        # Instance of target sans recursive context
+                        results_container.target_outta_context.append(tok)
 
         if results_container._is_empty_():
             print('Query returned no matches', file=sys.stderr)
             return None
         else:
-            print(results_container, file=sys.stderr)
             return results_container
