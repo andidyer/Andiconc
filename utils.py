@@ -11,7 +11,8 @@ import time
 def is_match(token, tree, deprel=None, form=None, lemma=None,
              upos=None, xpos=None,
              head_search=None, child_search=None,
-             regex=False, ignorecase=False):
+             regex=False, ignorecase=False,
+             n_times=1):
     """The basic function for finding tokens that match the query.
     This function should be used for both collocation searches and
     concordancing.
@@ -36,6 +37,10 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
 
         regex: bool: Whether to use regular expression matching for form and lemma
         ignorecase: bool: Whether the search should be case-sensitive
+
+        n_times: int: for use in child_search. the number of times a given child token should appear.
+                        For example, if we want to find a VERB with three objects (e.g. listing), we
+                        might use {"upos": "verb", "child_search": {"deprel": "obj", "n_times": 3}}
 
     @return:
         bool: True/False"""
@@ -99,7 +104,8 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
             for i, cid in enumerate(token.children):
                 child_token = tree.map[cid]
                 matches += [is_match(child_token, tree, **child_item)]
-            if not any(matches):
+            n_true = len([m for m in matches if m==True])
+            if n_true < n_times:
                 return False
 
     #Returns true if it has passed all specified conditions.
@@ -168,7 +174,6 @@ def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
             features: iterable: An iterable of token feature attributes to specify
             match_list: iterable: An iterable of pyconll.Token objects"""
 
-    global counter_out
     counter_out = Counter()
     for token in match_list:
         # make dict to load into the namedtuple
@@ -181,7 +186,7 @@ def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
         token_nt = token_namedtuple(**mydict)  # Namedtuple
         counter_out.update([token_nt])  # Can add to set because it's immutable
 
-    return set(k for k, v in counter_out.items() if v >= min_freq)
+    return set(k for k, v in counter_out.items() if v >= min_freq) #Filter low frequency
 
 def _map_tokens(tree):
     """Assigns map attribute to tree"""
