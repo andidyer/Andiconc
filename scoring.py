@@ -24,6 +24,8 @@ def score_token(results_container, token, measure='t-test', ignorecase=False, lo
         score = score_token_raw_freq(results_container, token, ignorecase, log, epsilon)
     elif measure == 'rel-freq':
         score = score_token_rel_freq(results_container, token, ignorecase, log, epsilon)
+    elif measure == 'conditional-probability':
+        score = score_token_conditional_probability(results_container, token, ignorecase, log, epsilon)
     elif measure == 'pmi':
         score = score_token_pmi(results_container, token, ignorecase, epsilon)
     elif measure == "pmi-norm":
@@ -52,6 +54,16 @@ def score_token_rel_freq(results_container, token, ignorecase=True, log=False, e
         score = raw_freq / results_container.n_words() #Fine to just return P=0
     else:
         score = math.log(max(epsilon, raw_freq) / results_container.n_words())
+    return round(score, round_places)
+
+def score_token_conditional_probability(results_container, token, ignorecase=True, log=False, epsilon=1e-10, round_places=5):
+    """Scores using conditional probability association measure (P(token|context)))"""
+    results_container.empty_sanity_check()
+    raw_freq = results_container.n_token_query(token, ignorecase=ignorecase)
+    if not log:
+        score = raw_freq / results_container.n_query() #Fine to just return P=0
+    else:
+        score = math.log(max(epsilon, raw_freq) / results_container.n_query())
     return round(score, round_places)
 
 def score_token_pmi(results_container, token, ignorecase=True, epsilon=1e-10, round_places=5):

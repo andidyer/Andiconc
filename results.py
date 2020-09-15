@@ -45,7 +45,7 @@ class Results:
         """
         Number of times a specified token appears as a target level match.
         """
-        tokenquery = utils._make_token_query_(token, ignorecase=ignorecase)
+        tokenquery = utils.make_token_query(token, ignorecase=ignorecase)
 
         i = 0
         gen = (tok for tok in self.target_all() if utils.feats_match(tok, **tokenquery))
@@ -62,7 +62,7 @@ class Results:
         """
 
         # coerces to non-recursive query object with constrained feature options
-        tokenquery = utils._make_token_query_(token, ignorecase=ignorecase)
+        tokenquery = utils.make_token_query(token, ignorecase=ignorecase)
 
         gen = (tok for tok in self.target_in_context if utils.feats_match(tok, **tokenquery))
         return len(list(gen))

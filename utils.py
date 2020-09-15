@@ -203,7 +203,7 @@ def _assign_children(tree):
             pass
 
 
-def _make_token_query_(token, ignorecase=False):
+def make_token_query(token, ignorecase=False):
     """Coerces word to a dictionary query.
         word: int OR dict: the word to search for in the target matches.  If int, returns a dict
                 containing form and ignorecase.  If dict, returns a dict with the specified features

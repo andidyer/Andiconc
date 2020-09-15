@@ -9,7 +9,7 @@ class CorpusSearch:
          namespace."""
 
     def __init__(self):
-        pass
+        self.verbose = True
 
     def collocations(self, query, treebank):
         """Collocations finder.
@@ -57,8 +57,14 @@ class CorpusSearch:
         sentences = []
         target_outta_context = []
 
+        i = 0
         # Treebank must be iterable, but may be generator
         for sent in treebank:
+
+            if self.verbose:
+                if i % 100 == 0:
+                    print('Read {} sentences'.format(i), file=sys.stderr)
+            i+=1
 
             #Preprocess sents by adding required attributes for navigation
             utils._map_tokens(sent)
