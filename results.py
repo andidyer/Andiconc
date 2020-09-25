@@ -5,7 +5,7 @@ import random
 import utils
 
 class Results:
-    def __init__(self, target_in_context: list, sentences: list, target_outta_context: list):
+    def __init__(self, target_in_context: list, sentences: list, target_outta_context: list, corpus_word_count: int, corpus_sent_count: int):
         """Container for search results."""
         self.target_in_context = target_in_context  # aka "query"
         self.sentences = sentences  # These ^ two go together
@@ -13,6 +13,10 @@ class Results:
 
         self._n_query_ = len(self.target_in_context)
         self._n_words_ = len(self.target_in_context) + len(self.target_outta_context)
+
+        #Corpus statistics
+        self.corpus_word_count = corpus_word_count
+        self.corpus_sent_count = corpus_sent_count
 
     def __str__(self):
         n_query = self.n_query()

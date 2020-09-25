@@ -115,7 +115,9 @@ def score_token_t_test(results_container, token, ignorecase=True, epsilon=1e-10,
     return score
 
 def _iter_score_set_tokens_(results_container, set_tokens, measure, log, ignorecase):
-    """Iter through a set of unique words and score them according to specified measure"""
+    """Iter through a set of unique words and score them according to specified measure
+
+    Utility function for top_n_collocations"""
     for word in set_tokens:
         query = word._asdict()
         score = score_token(results_container, query, measure=measure, log=log, ignorecase=ignorecase)
@@ -123,6 +125,9 @@ def _iter_score_set_tokens_(results_container, set_tokens, measure, log, ignorec
 
 def top_n_collocations(results_container, n=100, features='form upos', measure='pmi', log=False, ignorecase=True, count_negatives=False, min_freq=0, bottom=False):
     """Finds the top N highest (or lowest) scoring collocations of the searched context by association measure.
+    @posit-args:
+        results_container: Results: the results object for the query
+
     @kwargs:
         n: int: the n highest or lowest
         features: str: A string specifying the token features to distinguish by.

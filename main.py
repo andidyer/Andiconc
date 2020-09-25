@@ -10,11 +10,11 @@ treebank_dir = '/Users/andrew/Downloads/Brown_UD'
 treebank = CorpusLoader.iter_from_dir(treebank_dir)
 
 #Now, let's define a query
-query = {"deprel": "obj",
-         "head_search":
-             {
-            "lemma": "do"
-            }
+query = {"upos": "VERB",
+         "child_search":
+            [
+              {"deprel": "obj", "n_times":"3:100"}
+            ]
          }
 
 #We instantiate the CorpusSearch and call collocations() on the query and the treebank

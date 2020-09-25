@@ -8,11 +8,11 @@ import time
 #   2. Abstract form and lemma match to a single function, accepting ignorecase and regex as arguments
 #   3. Add linear (surface order) window search
 
-def is_match(token, tree, deprel=None, form=None, lemma=None,
-             upos=None, xpos=None,
-             head_search=None, child_search=None,
-             regex=False, ignorecase=False,
-             n_times=1):
+def recursive_match(token, tree, deprel=None, form=None, lemma=None,
+                    upos=None, xpos=None,
+                    head_search=None, child_search=None,
+                    regex=False, ignorecase=False,
+                    n_times='+'):
     """The basic function for finding tokens that match the query.
     This function should be used for both collocation searches and
     concordancing.
@@ -38,9 +38,12 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
         regex: bool: Whether to use regular expression matching for form and lemma
         ignorecase: bool: Whether the search should be case-sensitive
 
-        n_times: int: for use in child_search. the number of times a given child token should appear.
-                        For example, if we want to find a VERB with three objects (e.g. listing), we
-                        might use {"upos": "verb", "child_search": {"deprel": "obj", "n_times": 3}}
+        n_times: str: for use in child_search. the number of times a given child token should appear.
+                        There are three basic ways of using this.  The first (and default) is simply to
+                        use '+', which signifies that one or more sch child is found.  The second is to use
+                        an integer value, such as '2', which signifies that exactly two such children are found.
+                        The third is to specify a  range, such as '2:5'. which signifies that between two and five
+                        such tokens are found.
 
     @return:
         bool: True/False"""
@@ -93,7 +96,7 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
         elif token.head == None:
             return False  # Will be a bridge or an ED.
         head_tok = tree.map[token.head]
-        if not is_match(head_tok, tree, **head_search):
+        if not recursive_match(head_tok, tree, **head_search):
             return False
 
     if child_search != None:
@@ -101,12 +104,40 @@ def is_match(token, tree, deprel=None, form=None, lemma=None,
             child_item['regex'] = regex
             child_item['ignorecase'] = ignorecase
             matches = []
+            #Iterates through the token's children to find context matches
             for i, cid in enumerate(token.children):
                 child_token = tree.map[cid]
-                matches += [is_match(child_token, tree, **child_item)]
-            n_true = len([m for m in matches if m==True])
-            if n_true < n_times:
-                return False
+                matches += [recursive_match(child_token, tree, **child_item)]
+
+            #Number of times the child token matched the specified context
+            n_true: int = len([m for m in matches if m==True])
+
+
+            n_times : str = child_item['n_times']
+            if n_times == '+':
+                #This is when there need only be one or more match
+                if n_true < 1:
+                    return False
+
+            elif re.fullmatch('\d+:\d+', n_times):
+                #This is when a range argument is called, and there needs to be lo <= n <= hi matches
+                lo, hi = list(map(int, n_times.split(':')))
+                if lo > hi:
+                    raise ValueError('Lower bound higher than higher bound')
+                if not lo <= n_true <= hi:
+                    return False
+
+            elif re.fullmatch('\d+', n_times):
+                #This is where there needs to be exactly n mstches
+                if n_true != int(n_times):
+                    return False
+
+            else:
+                raise ValueError('Something went wrong when specifying n_times in child_search. Check input argument')
+
+
+
+
 
     #Returns true if it has passed all specified conditions.
     #If no conditions are specified, just returns true.
@@ -210,9 +241,15 @@ def _assign_children(tree):
 
 def make_token_query(token, ignorecase=False):
     """Coerces word to a dictionary query.
-        word: int OR dict: the word to search for in the target matches.  If int, returns a dict
+    @posit-args:
+        token: int OR dict: the word to search for in the target matches.  If int, returns a dict
                 containing form and ignorecase.  If dict, returns a dict with the specified features
-                plus ignorecase"""
+                plus ignorecase
+    @kwargs:
+        ignorecase: bool: Whether to ignore case
+    @returns:
+        tokenquery: dict: A dictionary with specified parameters
+    """
     if isinstance(token, str):
         tokenquery = {"form": token, "ignorecase": ignorecase}
     elif isinstance(token, dict):

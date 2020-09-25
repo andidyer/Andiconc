@@ -45,7 +45,7 @@ class CorpusSearch:
 
         # parse the query into target and context
         context = {k: v for (k, v) in query.items() if k in ("head_search",
-            "child_search", "regex", "ignorecase")}
+            "child_search", "regex", "ignorecase","n_times")}
 
         target = {k: v for (k, v) in query.items() if k not in ("head_search",
             "child_search")}
@@ -57,14 +57,15 @@ class CorpusSearch:
         sentences = []
         target_outta_context = []
 
-        i = 0
+        n_sents = 0
+        n_words = 0
         # Treebank must be iterable, but may be generator
         for sent in treebank:
 
             if self.verbose:
-                if i % 100 == 0:
-                    print('Read {} sentences'.format(i), file=sys.stderr)
-            i+=1
+                if n_sents % 1000 == 0:
+                    print('Read {} sentences and {} words'.format(n_sents, n_words), file=sys.stderr)
+            n_sents += 1
 
             #Preprocess sents by adding required attributes for navigation
             utils._map_tokens(sent)
@@ -73,13 +74,14 @@ class CorpusSearch:
             #Context matches is a small bit of dynamic programming to reduce recursion
             context_matches = []
             for tok in sent:
+                n_words += 1
 
-                if utils.is_match(tok, sent, **context):
+                if utils.recursive_match(tok, sent, **context):
                     context_matches.append(tok.id)
 
             #Second loop is where the actual stuff happens.
             for tok in sent:
-                if utils.is_match(tok, sent, **target):
+                if utils.recursive_match(tok, sent, **target):
                     if tok.id in context_matches:
                         #This is a match of target and recursive context
                         target_in_context.append(tok)
@@ -88,7 +90,7 @@ class CorpusSearch:
                         # Instance of target sans recursive context
                         target_outta_context.append(tok)
 
-        results_container = Results(target_in_context, sentences, target_outta_context)
+        results_container = Results(target_in_context, sentences, target_outta_context, n_words, n_sents)
         if results_container.is_empty():
             print('Query returned no matches', file=sys.stderr)
             return None
