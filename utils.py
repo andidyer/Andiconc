@@ -1,5 +1,5 @@
 import re
-from collections import namedtuple, Counter
+from collections import namedtuple, Counter, defaultdict
 import time
 
 #TODO:
@@ -9,7 +9,7 @@ import time
 #   3. Add linear (surface order) window search
 
 def recursive_match(token, tree, deprel=None, form=None, lemma=None,
-                    upos=None, xpos=None,
+                    upos=None, xpos=None, feats=None,
                     head_search=None, child_search=None,
                     regex=False, ignorecase=False,
                     n_times='+'):
@@ -88,6 +88,9 @@ def recursive_match(token, tree, deprel=None, form=None, lemma=None,
         elif lemma_x != lemma_y:
             return False
 
+    if feats != None:
+        pass
+
     if head_search != None:
         head_search['regex'] = regex
         head_search['ignorecase'] = ignorecase
@@ -100,47 +103,46 @@ def recursive_match(token, tree, deprel=None, form=None, lemma=None,
             return False
 
     if child_search != None:
-        for child_item in child_search:
-            child_item['regex'] = regex
-            child_item['ignorecase'] = ignorecase
-            matches = []
-            #Iterates through the token's children to find context matches
+        #TODO: Major refactoring
+        for search_item in child_search:
+            search_item['regex'] = regex # Inherits regex and ignorecase
+            search_item['ignorecase'] = ignorecase
+
+            # Iterates through the token's children to find context matches
+            n_true = 0
             for i, cid in enumerate(token.children):
                 child_token = tree.map[cid]
-                matches += [recursive_match(child_token, tree, **child_item)]
+                n_true += recursive_match(child_token, tree, **search_item)
 
-            #Number of times the child token matched the specified context
-            n_true: int = len([m for m in matches if m==True])
+            # Note that this is n_times kwarg of the item of the child_search list, not the current query
+            occur_req = search_item['n_times']
 
-
-            n_times : str = child_item['n_times']
-            if n_times == '+':
-                #This is when there need only be one or more match
+            if occur_req == '+':
                 if n_true < 1:
                     return False
 
-            elif re.fullmatch('\d+:\d+', n_times):
-                #This is when a range argument is called, and there needs to be lo <= n <= hi matches
-                lo, hi = list(map(int, n_times.split(':')))
+            elif re.match("\d+:\d+", occur_req):
+                lo, hi = re.search(r'(\d+):(\d+)',occur_req).groups()
                 if lo > hi:
-                    raise ValueError('Lower bound higher than higher bound')
+                    raise ValueError("lo greater than hi")
+                lo, hi = map(int, [lo,hi])
                 if not lo <= n_true <= hi:
                     return False
 
-            elif re.fullmatch('\d+', n_times):
-                #This is where there needs to be exactly n mstches
-                if n_true != int(n_times):
+            elif re.fullmatch("\d+:\d+", occur_req):
+                lo, hi = re.search(r'(\d+):(\d+)',occur_req).groups()
+                if lo > hi:
+                    raise ValueError("lo greater than hi")
+                lo, hi = map(int, [lo,hi])
+                if not lo <= n_true <= hi:
                     return False
 
-            else:
-                raise ValueError('Something went wrong when specifying n_times in child_search. Check input argument')
+            elif re.fullmatch("\d+", occur_req):
+                if n_true != int(occur_req):
+                    return False
 
-
-
-
-
-    #Returns true if it has passed all specified conditions.
-    #If no conditions are specified, just returns true.
+    # Returns true if it has passed all specified conditions.
+    # If no conditions are specified, just returns true.
     return True
 
 def feats_match(token, deprel=None, form=None, lemma=None,
@@ -150,7 +152,7 @@ def feats_match(token, deprel=None, form=None, lemma=None,
         need a tree.  It also does not support regex; only ignorecase
 
         @posit-args:
-            token: pyconll.token: A pyconll token object
+            token: dict: a representation of the token in JSON form
 
         @kwargs:
             deprel: str: The deprel to check the token against
@@ -166,38 +168,39 @@ def feats_match(token, deprel=None, form=None, lemma=None,
 
     if form != None:
         form_x = form.lower() if ignorecase else form
-        form_y = token.form.lower() if ignorecase else token.form
+        form_y = token['form'].lower() if ignorecase else token['form']
         if form_x != form_y:
             return False
 
     if lemma != None:
         lemma_x = lemma.lower() if ignorecase else lemma
-        lemma_y = token.lemma.lower() if ignorecase else token.lemma
+        lemma_y = token['lemma'].lower() if ignorecase else token['lemma']
         if lemma_x != lemma_y:
             return False
 
     if deprel != None:
         try:
-            deprel_match = re.match(deprel, token.deprel)
+            # This need not be a fullmatch, as UD can feature fine-grained deprel informations
+            deprel_match = re.match(deprel, token['deprel'])
         except TypeError:  # This will be a token without a deprel, like a bridge
             return False  # or an enhanced dependency
         if not deprel_match:
             return False
 
     if upos != None:
-        if token.upos != upos:
+        if token['upos'] != upos:
             return False
 
     if xpos != None:
-        if token.xpos != xpos:
+        if token['xpos'] != xpos:
             return False
 
     return True
 
-def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
+def unique_token_set(features, match_list, ignorecase=False, min_freq=0, min_cxt=0):
     """Given a list of features and an iterable of tokens, iterates through the tokens and adds them
         to a set as namedtuples.  These named tuples contain the attributes form, lemma, upos, xpos, and deprel.
-        If a feature is not specified, when the namedtuple attribute for that feature will be None.
+        If a feature is not specified, then the namedtuple attribute for that feature will be None.
 
         Private function, mainly used for top_n_collocations
 
@@ -205,19 +208,20 @@ def _unique_token_set_(features, match_list, ignorecase=False, min_freq=0):
             features: iterable: An iterable of token feature attributes to specify
             match_list: iterable: An iterable of pyconll.Token objects"""
 
-    counter_out = Counter()
+    dict_out = defaultdict(lambda: [0,0])
     for token in match_list:
         # make dict to load into the namedtuple
         mydict = {}
         for feat in features:
-            feat_value = getattr(token, feat)
+            feat_value = token[feat]
             if ignorecase and feat == 'form':
                 feat_value = feat_value.lower()
             mydict[feat] = feat_value
         token_nt = token_namedtuple(**mydict)  # Namedtuple
-        counter_out.update([token_nt])  # Can add to set because it's immutable
+        dict_out[token_nt][0] += token['occur']['n_times_in_context']
+        dict_out[token_nt][1] += token['occur']['n_times_all']
 
-    return set(k for k, v in counter_out.items() if v >= min_freq) #Filter low frequency
+    return [(k, v[0], v[1]) for k,v in dict_out.items() if v[0] >= min_cxt and v[1] >= min_freq]
 
 def _map_tokens(tree):
     """Assigns map attribute to tree"""
@@ -225,7 +229,6 @@ def _map_tokens(tree):
     for tok in tree:
         tok.children = []  # Add children attribute
         tree.map[tok.id] = tok  # map token ID to token object pointer
-
 
 def _assign_children(tree):
     """Assigns child attribute to tokens in tree
@@ -237,7 +240,6 @@ def _assign_children(tree):
             head_tok.children += [tok.id]  # Populate children for whole tree
         except KeyError:
             pass
-
 
 def make_token_query(token, ignorecase=False):
     """Coerces word to a dictionary query.
@@ -270,5 +272,5 @@ class OOVError(Exception):
 class EmptyQueryError(Exception):
     pass
 
-#namedtuple for the collocation search
+# namedtuple for the collocation search
 token_namedtuple = namedtuple('token', ['form', 'lemma', 'upos', 'xpos', 'deprel'], defaults=[None] * 5)

@@ -1,4 +1,5 @@
 import utils
+import re
 import sys
 
 from results import Results
@@ -52,10 +53,9 @@ class CorpusSearch:
 
         #This container will hold the results of the search, and
         #will be the driver for various stats stuff
-        #results_container = Results()
-        target_in_context = []
+        retrieved_tokens = []
         sentences = []
-        target_outta_context = []
+        is_cxt = []
 
         n_sents = 0
         n_words = 0
@@ -74,6 +74,9 @@ class CorpusSearch:
             #Context matches is a small bit of dynamic programming to reduce recursion
             context_matches = []
             for tok in sent:
+                if re.match(r"\d+[-.]", tok.id):
+                    continue
+
                 n_words += 1
 
                 if utils.recursive_match(tok, sent, **context):
@@ -81,16 +84,15 @@ class CorpusSearch:
 
             #Second loop is where the actual stuff happens.
             for tok in sent:
+                if re.match(r"\d+[-.]", tok.id):
+                    continue
                 if utils.recursive_match(tok, sent, **target):
-                    if tok.id in context_matches:
-                        #This is a match of target and recursive context
-                        target_in_context.append(tok)
-                        sentences.append(sent)
-                    else:
-                        # Instance of target sans recursive context
-                        target_outta_context.append(tok)
+                    cxt_match: bool = tok.id in context_matches
+                    retrieved_tokens.append(tok)
+                    sentences.append(sent)
+                    is_cxt.append(cxt_match)
 
-        results_container = Results(target_in_context, sentences, target_outta_context, n_words, n_sents)
+        results_container = Results(retrieved_tokens, sentences, is_cxt, n_words, n_sents)
         if results_container.is_empty():
             print('Query returned no matches', file=sys.stderr)
             return None

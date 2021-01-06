@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/results.py" beforeDir="false" afterPath="$PROJECT_DIR$/results.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scoring.py" beforeDir="false" afterPath="$PROJECT_DIR$/scoring.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/token.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/corpusloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
+            <state relative-caret-position="675">
+              <caret line="46" column="63" selection-start-line="46" selection-start-column="63" selection-end-line="46" selection-end-column="63" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -32,17 +33,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/corpussearch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+            <state relative-caret-position="1425">
+              <caret line="99" column="36" selection-start-line="99" selection-start-column="36" selection-end-line="99" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scoring.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="102" column="43" lean-forward="true" selection-start-line="102" selection-start-column="43" selection-end-line="102" selection-end-column="43" />
+            <state relative-caret-position="276">
+              <caret line="153" column="57" selection-start-line="153" selection-start-column="57" selection-end-line="153" selection-end-column="57" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -51,22 +55,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/results.py">
+        <entry file="file://$PROJECT_DIR$/scoring.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1275">
-              <caret line="85" column="105" lean-forward="true" selection-start-line="85" selection-start-column="105" selection-end-line="85" selection-end-column="105" />
+            <state relative-caret-position="3045">
+              <caret line="208" column="92" selection-start-line="208" selection-start-column="92" selection-end-line="208" selection-end-column="92" />
               <folding>
-                <element signature="e#63#74#0" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/sentence.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3540">
+              <caret line="241" selection-start-line="241" selection-end-line="241" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="7" column="49" lean-forward="true" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="49" />
+            <state relative-caret-position="120">
+              <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -74,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="141" column="39" lean-forward="true" selection-start-line="141" selection-start-column="39" selection-end-line="141" selection-end-column="39" />
+            <state relative-caret-position="1830">
+              <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -99,6 +112,11 @@
       <find>print</find>
       <find>_make_to</find>
       <find>sleep</find>
+      <find>av_key</find>
+      <find>fallujah</find>
+      <find>300</find>
+      <find>is_mul</find>
+      <find>22</find>
     </findStrings>
     <replaceStrings>
       <replace>ignorecase</replace>
@@ -117,19 +135,22 @@
       <list>
         <option value="$PROJECT_DIR$/demo.ipynb" />
         <option value="$PROJECT_DIR$/corpusloader.py" />
-        <option value="$PROJECT_DIR$/results.py" />
+        <option value="$PROJECT_DIR$/results2.py" />
+        <option value="$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/sentence.py" />
+        <option value="$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/token.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/corpussearch.py" />
         <option value="$PROJECT_DIR$/scoring.py" />
         <option value="$PROJECT_DIR$/utils.py" />
+        <option value="$PROJECT_DIR$/results.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="226" />
-    <option name="y" value="46" />
-    <option name="width" value="1400" />
-    <option name="height" value="918" />
+    <option name="x" value="188" />
+    <option name="y" value="23" />
+    <option name="width" value="1412" />
+    <option name="height" value="775" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -137,6 +158,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -159,7 +181,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -204,6 +225,9 @@
       <module name="Andiconc" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -289,7 +313,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600210709885</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;implemented child_search n_times argument">
+      <created>1601064060172</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1601064060172</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -302,20 +333,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="226" y="46" width="1400" height="918" extended-state="0" />
-    <editor active="true" />
+    <frame x="188" y="23" width="1412" height="775" extended-state="0" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24945612" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2473041" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" sideWeight="0.49963742" weight="0.3292978" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" sideWeight="0.49963742" visible="true" weight="0.32796487" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5003626" side_tool="true" weight="0.3292978" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="2" sideWeight="0.49963742" visible="true" weight="0.3292978" />
+      <window_info anchor="bottom" id="Python Console" order="2" sideWeight="0.49963742" weight="0.45827234" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.3292978" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32796487" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.3292978" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.3292978" />
-      <window_info anchor="bottom" id="Debug" order="7" weight="0.39951575" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.39824304" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="10" sideWeight="0.49963742" weight="0.3292978" />
@@ -335,7 +365,8 @@
     <MESSAGE value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;Moved scoring functions to separate file." />
     <MESSAGE value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;Added conditional probability, general refactoring and renaming" />
     <MESSAGE value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;Started implementation of n_times arg in child search" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;Started implementation of n_times arg in child search" />
+    <MESSAGE value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;implemented child_search n_times argument" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge https://github.com/andidyer/Andiconc&#10;&#10;# Please enter a commit message to explain why this merge is necessary,&#10;# especially if it merges an updated upstream into a topic branch.&#10;#&#10;# Lines starting with '#' will be ignored, and an empty message aborts&#10;# the commit.&#10;&#10;implemented child_search n_times argument" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/demo.ipynb" />
@@ -344,16 +375,6 @@
         <state split_layout="SPLIT">
           <first_editor />
           <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corpusloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -371,47 +392,85 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/results.py">
+    <entry file="file://$PROJECT_DIR$/results2.py" />
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/re.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="85" column="105" lean-forward="true" selection-start-line="85" selection-start-column="105" selection-end-line="85" selection-end-column="105" />
+        <state relative-caret-position="157">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/token.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="481" lean-forward="true" selection-start-line="481" selection-end-line="481" />
           <folding>
-            <element signature="e#63#74#0" expanded="true" />
+            <element signature="e#176#215#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corpusloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="46" column="63" selection-start-line="46" selection-start-column="63" selection-end-line="46" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/corpussearch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+        <state relative-caret-position="1425">
+          <caret line="99" column="36" selection-start-line="99" selection-start-column="36" selection-end-line="99" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scoring.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="102" column="43" lean-forward="true" selection-start-line="102" selection-start-column="43" selection-end-line="102" selection-end-column="43" />
+        <state relative-caret-position="3045">
+          <caret line="208" column="92" selection-start-line="208" selection-start-column="92" selection-end-line="208" selection-end-column="92" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/pyconll/unit/sentence.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3540">
+          <caret line="241" selection-start-line="241" selection-end-line="241" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="141" column="39" lean-forward="true" selection-start-line="141" selection-start-column="39" selection-end-line="141" selection-end-column="39" />
+        <state relative-caret-position="1830">
+          <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="7" column="49" lean-forward="true" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="49" />
+        <state relative-caret-position="276">
+          <caret line="153" column="57" selection-start-line="153" selection-start-column="57" selection-end-line="153" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
